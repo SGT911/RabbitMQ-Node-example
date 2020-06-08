@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  rabbit:
+    image: rabbitmq:3.8
+    ports:
+      - 15672:15672
+  sender:
+    build: ./sender
+    restart: always
+    image: sgt911/hello-sender:node
+    depends_on:
+      - rabbit
+    environment:
+      RABBITMQ_HOST: rabbit
+  receiver:
+    build: ./receiver
+    restart: always
+    image: sgt911/hello-receiver:node
+    depends_on:
+      - rabbit
+    environment:
+      RABBITMQ_HOST: rabbit
